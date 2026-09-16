@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NAmma BiZZ — Madurai Wholesale Business Connect</title>
+  <meta name="description" content="NAmma BiZZ connects customers with relevant wholesale businesses across Madurai using AI-powered business matching." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=20260919">
+</head>
+<body>
+  <div class="topbar">
+    <div class="container">
+      <div class="location-status"><span id="locationStatus">📍 Serving Madurai Region Only</span><button class="location-button" id="locationButton" onclick="detectLocation()">Use my location</button></div>
+      <span>AI-powered wholesale business discovery</span>
+    </div>
+  </div>
+
+  <header>
+    <div class="container">
+      <nav>
+        <a class="logo" href="#home">NAmma <span>BiZZ</span></a>
+        <div class="navlinks">
+          <a href="#domains">Domains</a>
+          <a href="#businesses">Businesses</a>
+          <a href="#how">How it works</a>
+          <a href="#feedback">Feedback</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="home">
+    <section class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <div class="eyebrow"><span class="dot"></span> Madurai's wholesale business network</div>
+          <h1>Tell us what you need. We’ll find the right business.</h1>
+          <p>NAmma BiZZ connects customers with relevant wholesale businesses across Madurai. Describe your requirement in your own words and let our AI match you with suitable suppliers.</p>
+          <div class="searchbox">
+            <textarea id="requirement" placeholder="Example: I need 100 men's cotton shirts from a wholesale supplier in Madurai..."></textarea>
+            <button class="btn btn-primary" onclick="runAI()">✨ Find Businesses</button>
+          </div>
+          <div class="quick">
+            <button onclick="fill('Men’s cotton shirts wholesale')">Men’s garments</button>
+            <button onclick="fill('Rice and grocery wholesale supplier')">Grocery</button>
+            <button onclick="fill('Electrical materials wholesale')">Electrical</button>
+            <button onclick="fill('Building materials wholesale')">Construction</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="container">
+      <div class="stats">
+        <div class="stat"><strong>Madurai</strong><span>Focused region</span></div>
+        <div class="stat"><strong>Wholesale</strong><span>Supplier-first network</span></div>
+        <div class="stat"><strong>AI Match</strong><span>Requirement-based discovery</span></div>
+        <div class="stat"><strong>Feedback</strong><span>Improves recommendations</span></div>
+      </div>
+    </div>
+
+    <section class="domains" id="domains">
+      <div class="container">
+        <div class="section-head">
+          <div><h2>Explore by business domain</h2><p>Find wholesale businesses based on what they supply and the purpose they serve.</p></div>
+          <div class="domain-actions"><button class="btn btn-outline" onclick="scrollToId('qa')">Ask catalog AI</button><button class="btn btn-primary" onclick="scrollToId('estimator')">AI estimator</button></div>
+        </div>
+        <div class="domain-grid">
+          <div class="domain" onclick="filterBusinesses('Textiles & Garments')"><div class="icon">🧵</div><h3>Textiles & Garments</h3><p>Garments, fabrics, sarees and apparel suppliers.</p></div>
+          <div class="domain" onclick="filterBusinesses('Food & Grocery')"><div class="icon">🌾</div><h3>Food & Grocery</h3><p>Rice, grains, spices and wholesale food products.</p></div>
+          <div class="domain" onclick="filterBusinesses('Hardware & Construction')"><div class="icon">🏗️</div><h3>Hardware & Construction</h3><p>Building materials, hardware, plumbing and electrical.</p></div>
+          <div class="domain" onclick="filterBusinesses('Agriculture')"><div class="icon">🌱</div><h3>Agriculture</h3><p>Seeds, farm supplies, equipment and agricultural inputs.</p></div>
+          <div class="domain" onclick="filterBusinesses('Packaging')"><div class="icon">📦</div><h3>Packaging</h3><p>Boxes, paper, plastic and industrial packaging.</p></div>
+          <div class="domain" onclick="filterBusinesses('Industrial Supplies')"><div class="icon">⚙️</div><h3>Industrial Supplies</h3><p>Materials and supplies for local businesses.</p></div>
+          <div class="domain" onclick="filterBusinesses('Home & Furniture')"><div class="icon">🪑</div><h3>Home & Furniture</h3><p>Furniture, home products and commercial supplies.</p></div>
+          <div class="domain" onclick="filterBusinesses('Home Building Services')"><div class="icon">🛠️</div><h3>Home Building Services</h3><p>Plumbers, welders, electricians and home builders.</p></div>
+          <div class="domain" onclick="filterBusinesses('Other Wholesale')"><div class="icon">＋</div><h3>Other Wholesale</h3><p>Discover additional verified wholesale categories.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="businesses">
+      <div class="container">
+        <div class="section-head">
+          <div><h2>Featured businesses and services</h2><p id="businessSubtitle">44 demo businesses and service providers across 9 domains. These are fictional prototype records, not verified real businesses.</p></div>
+          <button class="btn btn-outline" onclick="resetBusinesses()">Reset</button>
+        </div>
+        <div class="business-grid" id="businessGrid"></div>
+      </div>
+    </section>
+
+    <section class="how" id="how">
+      <div class="container">
+        <div class="section-head">
+          <div><h2>Simple for customers. Powerful for businesses.</h2><p style="color:#b8c9dc">NAmma BiZZ turns an everyday requirement into a focused list of relevant wholesale suppliers.</p></div>
+        </div>
+        <div class="steps">
+          <div class="step"><div class="num">01</div><h3>Describe</h3><p>Write what you need naturally — product, quantity, location or preference.</p></div>
+          <div class="step"><div class="num">02</div><h3>Understand</h3><p>AI extracts the important requirements from your message.</p></div>
+          <div class="step"><div class="num">03</div><h3>Match</h3><p>Businesses are filtered and ranked based on relevance.</p></div>
+          <div class="step"><div class="num">04</div><h3>Choose & tell us why</h3><p>Your choice feedback helps improve future recommendations.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="ai">
+      <div class="container">
+        <div class="ai-panel">
+          <div class="ai-copy">
+            <div class="tag">AI BUSINESS MATCHING</div>
+            <h2>Not just search. Intelligent matching.</h2>
+            <p style="color:var(--muted)">The live version uses a server-side LLM to understand requirements and match them only against the NAmma BiZZ wholesale catalog.</p>
+            <div class="checklist">
+              <div class="check"><i>✓</i> Product and category relevance</div>
+              <div class="check"><i>✓</i> Wholesale capability and bulk orders</div>
+              <div class="check"><i>✓</i> Madurai location and service area</div>
+              <div class="check"><i>✓</i> Customer selection feedback</div>
+            </div>
+            <button class="btn btn-primary" onclick="scrollToId('qa')">Ask the catalog AI</button>
+          </div>
+          <div class="ai-demo">
+            <div class="query"><strong>Catalog Q&A</strong><br><span>Ask about products, prices, MOQs, bestsellers, or the closest supplier.</span></div>
+            <div class="qa-example">“Which cotton shirt supplier is closest to me?”</div>
+            <div class="qa-example">“What is the MOQ for Premium Cotton Shirts?”</div>
+            <div class="qa-example">“Which business has the best-selling rice product?”</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="qa" class="qa-section">
+      <div class="container">
+        <div class="section-head"><div><h2>Ask the catalog AI</h2><p>Get grounded answers about the demo wholesale directory. Turn on GPS for distance-aware answers.</p></div></div>
+        <div class="qa-box">
+          <textarea id="questionInput" placeholder="Ask: Which supplier has the lowest MOQ for cotton shirts?"></textarea>
+          <button class="btn btn-primary" onclick="askCatalogAI()">Ask AI</button>
+          <div id="qaAnswer" class="qa-answer" aria-live="polite">Your answer will appear here.</div>
+        </div>
+        <div class="estimator-box" id="estimator">
+          <div class="estimator-heading"><h3>AI price estimator</h3><p>Estimate the order total and show only businesses within the customer budget.</p></div>
+          <div class="estimator-fields"><input id="estimateProduct" placeholder="Product or service, e.g. cotton shirts" /><input id="estimateQuantity" type="number" min="1" step="1" placeholder="Quantity" /><input id="estimateBudget" type="number" min="1" step="1" placeholder="Maximum budget (₹)" /><button class="btn btn-primary" onclick="estimatePrice()">Estimate price</button></div>
+          <div id="estimateAnswer" class="qa-answer" aria-live="polite">Enter a product, quantity, and maximum budget.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="feedback" id="feedback">
+      <div class="container">
+        <div class="section-head" style="justify-content:center;text-align:center">
+          <div><h2>Why did you choose this business?</h2><p>Every choice can teach NAmma BiZZ what matters most to customers.</p></div>
+        </div>
+        <div class="feedback-box">
+          <h3>Tell us what influenced your decision</h3>
+          <p class="meta">Select one or more reasons after choosing a business.</p>
+          <div class="choices">
+            <button class="choice" onclick="toggleChoice(this)">Best price</button>
+            <button class="choice" onclick="toggleChoice(this)">Product availability</button>
+            <button class="choice" onclick="toggleChoice(this)">Location</button>
+            <button class="choice" onclick="toggleChoice(this)">Quality</button>
+            <button class="choice" onclick="toggleChoice(this)">Bulk quantity</button>
+            <button class="choice" onclick="toggleChoice(this)">Delivery option</button>
+            <button class="choice" onclick="toggleChoice(this)">Good reviews</button>
+            <button class="choice" onclick="toggleChoice(this)">AI recommendation</button>
+          </div>
+          <textarea id="feedbackText" style="width:100%;border:1px solid var(--line);border-radius:12px;padding:13px;min-height:90px;resize:vertical;outline:0" placeholder="Anything else you would like us to know?"></textarea>
+          <button class="btn btn-primary" style="margin-top:14px" onclick="submitFeedback()">Submit feedback</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div><div class="logo" style="color:#fff">NAmma <span>BiZZ</span></div><p>AI-powered wholesale business discovery for the Madurai region.</p></div>
+        <div><h3>Explore</h3><p><a href="#domains">Business Domains</a></p><p><a href="#businesses">Businesses</a></p></div>
+        <div><h3>Platform</h3><p><a href="#ai">AI Matching</a></p><p><a href="#feedback">Customer Feedback</a></p></div>
+        <div><h3>Scope</h3><p>Madurai Region</p><p>Wholesale Businesses</p></div>
+      </div>
+      <div class="footer-bottom"><span>© 2026 NAmma BiZZ. Prototype.</span><span>Built for a Madurai-first business network.</span></div>
+    </div>
+  </footer>
+
+
+  <div class="modal" id="businessModal" onclick="closeBusinessModal(event)">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeBusinessModal()" aria-label="Close">×</button>
+      <div class="modal-hero" id="modalHero">
+        <div class="modal-title"><h2 id="modalName">Business Name</h2><p id="modalCategory">Category · Madurai</p></div>
+      </div>
+      <div class="modal-body">
+        <div class="modal-grid">
+          <div>
+            <div class="modal-section"><h3>About the business</h3><p id="modalDescription"></p></div>
+            <div class="modal-section"><h3>5 work demo / bestseller products</h3><div class="product-list" id="modalProducts"></div></div>
+            <div class="modal-section"><h3>Customer feedback</h3><div class="mini-reviews" id="modalReviews"></div></div>
+          </div>
+          <aside>
+            <div class="info-box"><strong>LOCATION</strong><span id="modalLocation"></span></div>
+            <div class="info-box"><strong>BUSINESS TYPE</strong><span>Wholesale supplier</span></div>
+            <div class="info-box"><strong>RATING</strong><span id="modalRating"></span></div>
+            <div class="info-box"><strong>BUSINESS HOURS</strong><span id="modalHours"></span></div>
+            <div class="info-box"><strong>CONTACT</strong><span id="modalPhone"></span></div>
+            <div class="modal-actions"><button class="btn btn-primary" onclick="chooseFromModal()">Choose business</button><button class="btn btn-outline" onclick="closeBusinessModal()">Close</button></div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js?v=20260919" defer></script>
+</body>
+</html>
