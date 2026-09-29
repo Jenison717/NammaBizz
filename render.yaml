@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: namma-bizz
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python run.py
+    healthCheckPath: /api/health

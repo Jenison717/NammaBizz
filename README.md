@@ -53,3 +53,14 @@ The model is instructed never to invent businesses; recommendations are restrict
 If Groq is unavailable, `/api/ai-match` falls back to deterministic local catalog matching so the search remains usable. GPS coordinates are rounded before being sent to Groq. Product cards use domain/product-specific generated illustrations, while business cards use category-specific photography.
 
 Never commit `.env` or expose your API key in browser JavaScript. Feedback is stored locally in `data/feedback.json` for this prototype and is excluded from Git.
+
+## Deploy on Render
+
+Use a Render Web Service with:
+
+- Build command: `pip install -r requirements.txt`
+- Start command: `python run.py`
+- Health check path: `/api/health`
+- Environment variable: `GROQ_API_KEY` (optional because local fallback matching is available)
+
+The app reads Render's `PORT` variable and binds to `0.0.0.0` automatically.
