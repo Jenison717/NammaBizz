@@ -64,3 +64,5 @@ Use a Render Web Service with:
 - Environment variable: `GROQ_API_KEY` (optional because local fallback matching is available)
 
 The app reads Render's `PORT` variable and binds to `0.0.0.0` automatically.
+
+The root `app.py` is also provided as a compatibility entry point for hosts that still use `gunicorn app:app`; `gunicorn.conf.py` automatically selects the Uvicorn worker required by FastAPI.
