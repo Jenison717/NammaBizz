@@ -59,7 +59,7 @@ Never commit `.env` or expose your API key in browser JavaScript. Feedback is st
 Use a Render Web Service with:
 
 - Build command: `pip install -r requirements.txt`
-- Start command: `python run.py`
+- Start command: `gunicorn -k uvicorn.workers.UvicornWorker backend.main:app --bind 0.0.0.0:$PORT --workers 1 --access-logfile -`
 - Health check path: `/api/health`
 - Environment variable: `GROQ_API_KEY` (optional because local fallback matching is available)
 
