@@ -3212,6 +3212,14 @@ const visualTheme = {
         else if(/box|bag|film|container|bubble|pack/.test(q)) object=`<path d="M190 235l170-75 250 90-170 75z" fill="${light}"/><path d="M190 235v155l250 95V325z" fill="${accent}" opacity=".9"/><path d="M440 325v160l170-95V250z" fill="${dark}" opacity=".8"/>`;
         else if(/bearing|welding|helmet|disc|hose|industrial/.test(q)) object=`<circle cx="300" cy="300" r="105" fill="${dark}"/><circle cx="300" cy="300" r="48" fill="${light}"/><circle cx="300" cy="300" r="20" fill="${accent}"/><path d="M450 205h110v180H450z" rx="20" fill="${accent}"/><path d="M455 215h100v55H455z" fill="${light}"/>`;
         else if(/chair|rack|table|mattress|desk|furniture/.test(q)) object=`<rect x="220" y="205" width="220" height="90" rx="18" fill="${accent}"/><rect x="245" y="290" width="30" height="120" fill="${dark}"/><rect x="385" y="290" width="30" height="120" fill="${dark}"/><rect x="440" y="220" width="25" height="190" fill="${dark}"/><rect x="465" y="220" width="110" height="25" fill="${dark}"/>`;
+        else if(/plumb|pipe fitting|water line/.test(q)) object=`<path d="M225 225h170v65H290v120h-65z" fill="${accent}"/><path d="M395 225h120v65H460v120h-65z" fill="${light}"/><circle cx="340" cy="258" r="19" fill="${dark}"/><circle cx="430" cy="258" r="19" fill="${dark}"/>`;
+        else if(/weld|fabrication|metal gate|railing/.test(q)) object=`<path d="M235 390l92-170h55l-92 170z" fill="${accent}"/><path d="M360 390l92-170h55l-92 170z" fill="${light}"/><path d="M215 235h315M215 330h315" stroke="${dark}" stroke-width="18"/>`;
+        else if(/electric|wiring|lighting|led/.test(q)) object=`<path d="M325 170l-95 190h95l-40 95 145-220h-95z" fill="${accent}"/><circle cx="500" cy="270" r="74" fill="${light}"/><path d="M500 205v130M435 270h130" stroke="${dark}" stroke-width="14"/>`;
+        else if(/builder|construction|renovation|masonry/.test(q)) object=`<path d="M190 395V255l170-105 250 125v120z" fill="${accent}"/><path d="M355 390V285h105v105" fill="${light}"/><path d="M190 255l170-105 250 125" fill="none" stroke="${dark}" stroke-width="22"/>`;
+        else if(/clean|chemical/.test(q)) object=`<path d="M265 190h100v45l45 55v120H220V290l45-55z" fill="${light}"/><rect x="255" y="180" width="120" height="28" rx="8" fill="${accent}"/><path d="M250 315h130" stroke="${dark}" stroke-width="18"/>`;
+        else if(/decoration|event/.test(q)) object=`<path d="M190 205q105 115 210 0t210 0" fill="none" stroke="${accent}" stroke-width="18"/><circle cx="235" cy="250" r="35" fill="${light}"/><circle cx="400" cy="255" r="35" fill="${light}"/><circle cx="565" cy="250" r="35" fill="${light}"/><path d="M250 380q150-110 300 0" fill="none" stroke="${dark}" stroke-width="16"/>`;
+        else if(/stationery|notebook|paper/.test(q)) object=`<rect x="235" y="180" width="245" height="230" rx="12" fill="${light}"/><rect x="285" y="215" width="245" height="230" rx="12" fill="${accent}"/><path d="M325 275h150M325 320h150M325 365h100" stroke="${dark}" stroke-width="16"/>`;
+        else if(/disposable|utility/.test(q)) object=`<path d="M220 235h330l-35 190H255z" fill="${light}"/><path d="M235 250h300" stroke="${accent}" stroke-width="26"/><path d="M315 205h140" stroke="${dark}" stroke-width="20"/><circle cx="300" cy="335" r="28" fill="${accent}"/><circle cx="465" cy="335" r="28" fill="${accent}"/>`;
         else object=`<rect x="220" y="205" width="360" height="180" rx="22" fill="${light}"/><rect x="250" y="235" width="300" height="42" rx="10" fill="${accent}"/><rect x="250" y="300" width="90" height="22" rx="8" fill="${dark}"/><rect x="360" y="300" width="190" height="22" rx="8" fill="${dark}"/>`;
       }else{
         object=`<rect x="100" y="165" width="600" height="285" rx="30" fill="white" opacity=".97"/><rect x="135" y="205" width="175" height="190" rx="18" fill="${accent}"/><rect x="330" y="205" width="175" height="190" rx="18" fill="${dark}"/><rect x="525" y="205" width="140" height="190" rx="18" fill="${accent}" opacity=".72"/>`;
@@ -3231,9 +3239,10 @@ const visualTheme = {
     };
     function makeVisual(label, category, seed, product=false){
       const list=photoThemes[category]||photoThemes['Other Wholesale'];
-      if(product && Object.prototype.hasOwnProperty.call(productImageIndex,label)){
-        return list[productImageIndex[label] % list.length];
-      }
+      // Product cards use a generated illustration matched to the product name.
+      // This prevents a remote category photo (for example, a rice photo) from
+      // being reused for an unrelated product such as a switch or welding kit.
+      if(product) return makeFallbackVisual(label,category,seed,true);
       const idx=Math.abs(Number(seed)||1)%list.length;
       return list[idx];
     }
@@ -3432,6 +3441,10 @@ const visualTheme = {
       const d=data.detected.domain||"General";
       document.getElementById("businessSubtitle").textContent=
         `AI understood: ${d} · Product: ${data.requestedProducts.join(", ")||"general requirement"} · Quantity: ${data.quantity} · ${data.results.length} relevant Madurai wholesalers · Powered by Groq`;
+      const subtitle=document.getElementById("businessSubtitle");
+      if(data.aiModel && data.aiModel!=="openai/gpt-oss-20b"){
+        subtitle.textContent=subtitle.textContent.replace("Powered by Groq",data.aiModel).replace("AI understood","Catalog matching");
+      }
     }
     function scrollToId(id){document.getElementById(id).scrollIntoView({behavior:"smooth"})}
     function fill(text){document.getElementById("requirement").value=text;document.getElementById("requirement").focus()}
@@ -3528,7 +3541,7 @@ const visualTheme = {
     function viewBusiness(name){
       const b=businesses.find(x=>x.name===name);
       if(!b)return; selectedBusiness=b;
-      document.getElementById("modalHero").style.backgroundImage=`url('${b.image}')`;
+      document.getElementById("modalHero").style.backgroundImage=`url('${b.image}'),url('${b.fallback}')`;
       document.getElementById("modalName").textContent=b.name;
     document.getElementById("modalCategory").textContent=`${b.category} · ${b.location} · Demo Profile`;
       document.getElementById("modalDescription").textContent=b.description||"Wholesale business serving customers in the Madurai region.";
@@ -3559,12 +3572,17 @@ const visualTheme = {
         comment: text,
         submittedAt: new Date().toISOString()
       };
-      const previous=JSON.parse(localStorage.getItem("nammaBizzFeedback")||"[]");
-      previous.push(payload);
-      localStorage.setItem("nammaBizzFeedback",JSON.stringify(previous));
-      showToast("Thank you! Your selection feedback has been saved for this demo.");
-      document.querySelectorAll(".choice.active").forEach(x=>x.classList.remove("active"));
-      document.getElementById("feedbackText").value="";
+      fetch("/api/feedback",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
+        businessId:selectedBusiness?.id||null,reasons:selected,comment:text
+      })}).then(async response=>{
+        const data=await response.json();
+        if(!response.ok)throw new Error(data.detail||"Feedback could not be saved");
+        showToast("Thank you! Your feedback was saved.");
+        document.querySelectorAll(".choice.active").forEach(x=>x.classList.remove("active"));
+        document.getElementById("feedbackText").value="";
+      }).catch(error=>{
+        console.error(error);showToast("Feedback could not be saved right now. Please try again.");
+      });
     }
     function showToast(msg){
       const t=document.getElementById("toast");t.textContent=msg;t.style.display="block";

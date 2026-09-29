@@ -46,5 +46,10 @@ The model is instructed never to invent businesses; recommendations are restrict
 ## API
 - `GET /api/health`
 - `POST /api/ai-match` with JSON `{ "requirement": "I need 500 cotton school uniforms" }`
+- `POST /api/ask` for catalog questions
+- `POST /api/estimate` for catalog price estimates
+- `POST /api/feedback` for server-side customer feedback storage
 
-Never commit `.env` or expose your API key in browser JavaScript.
+If Groq is unavailable, `/api/ai-match` falls back to deterministic local catalog matching so the search remains usable. GPS coordinates are rounded before being sent to Groq. Product cards use domain/product-specific generated illustrations, while business cards use category-specific photography.
+
+Never commit `.env` or expose your API key in browser JavaScript. Feedback is stored locally in `data/feedback.json` for this prototype and is excluded from Git.
